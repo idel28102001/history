@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/uikit@3.5.4/dist/css/uikit.min.css" />
+  <link rel="stylesheet" href="./style.css">
+  <title>Document</title>
+  <style>
+
+  </style>
+</head>
+<body>
+  [% if user %]
+  <section id="app" v-cloak >
+
+  <div class="uk-background-primary">
+
+    <div class="uk-container uk-light uk-panel uk-flex uk-flex-between">
+      <span class="uk-h2 uk-margin-auto-vertical">Привет [[user.username]]!</span>
+      <a class="uk-h2 uk-margin-auto-vertical" href="/logout">Выйти</a>
+    </div>
+  </div>
+  <div>
+    <div class="uk-container" style="position: relative">
+      <div style="position: absolute; left:80px; top:0; width: 200px; background-color: blue; height: 600px"></div>
+      <div style="margin: 0 auto; width: 400px;">
+      <div style="background-color:purple; position:relative; height: 100px; margin-bottom: 20px">
+        <form  v-on:submit.prevent="makePost">
+        <textarea v-model="postSome" class="textarea" name="post" id="" cols="30" rows="10" placeholder="Что нового?"></textarea>
+        <button v-bind:disabled="!postSome" class="button">Поделиться</button>
+        </form>
+      </div>
+      <ul class="all-posts">
+        <li class="post" v-for="t in posts" :key="t._id">
+          <span style="display: none">{{t._id}}</span>
+          <div class="del-change" v-if="t.owner">
+            <button v-on:click="changePost">
+              <img class="icon-small" src="./pencil.png" alt="">
+            </button>
+            <button v-on:click="deletePost">
+              <img class="icon-small" src="./trash.png" alt="">
+            </button>
+          </div>
+          <div class="info">
+            <svg class="icon">
+          <use xlink:href="users.svg#user" />
+            </svg>
+            <div class="name-time">
+              <h4 class="name-time__name">{{t.username}}</h4>
+              <span class="name-time__time">{{getTime(t.datePosted)}}</span>
+            </div>
+          </div>
+          <p class="info__descr">{{t.description}}</p>
+        </li>
+      </ul>
+      </div>
+      <div style="position: absolute; right:80px; top:0; width: 200px; background-color: green; height: 600px;"></div>
+    </div>
+
+  </div>
+  </section>
+        <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.4/dist/js/uikit.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/uikit@3.5.4/dist/js/uikit-icons.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+       <script>
+        window.USER_ID = "[[ user._id ]]";
+        window.AUTH_TOKEN = "[[ userToken ]]";
+      </script>
+      <script src="/main.js"></script>
+  [% else %]
+  <div class="uk-container uk-margin-medium-top">
+  [% if authError %]
+    <div class="uk-alert uk-alert-danger">[[authError]]</div>
+  [% endif %]
+  <h2>Login</h2>
+  <form method="POST" action="/api/login" enctype="application/x-www-form-urlencoded">
+    <p><input type="text" name="username" class="uk-input"></p>
+    <p><input type="password" name="password" class="uk-input"></p>
+    <p><button class="uk-button uk-button-primary">Login</button></p>
+  </form>
+
+  [% if signError %]
+    <div class="uk-alert uk-alert-danger">[[signError]]</div>
+  [% elif signSuccess %]
+    <div class="uk-alert uk-alert-success">
+  [[ signSuccess ]]
+  </div>
+  [% endif %]
+    <h2>Sign Up</h2>
+  <form method="POST" action="/api/signup" enctype="application/x-www-form-urlencoded">
+    <p><input type="text" name="username" class="uk-input"></p>
+    <p><input type="password" name="password" class="uk-input"></p>
+    <p><button class="uk-button uk-button-primary">Signup</button></p>
+  </form>
+  </div>
+  [% endif %]
+</body>
+</html>
