@@ -1,4 +1,4 @@
-const { server } = require("./loginApp");
+const { server, app } = require("./postsApp");
 const WebSocket = require("ws");
 const clients = new Map();
 const iterAllClients = (clients, dict) => {
@@ -43,3 +43,5 @@ wss.on("connection", (ws) => {
     }
   });
 });
+
+module.exports = { server, app };

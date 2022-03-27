@@ -1,6 +1,6 @@
 require("dotenv").config();
 const nunjucks = require("nunjucks");
-const { server, app } = require("./scripts/postsApp");
+const { server, app } = require("./scripts/webSockets");
 
 nunjucks.configure("views", {
   autoescape: true,
